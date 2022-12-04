@@ -8,11 +8,6 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
         stage('Test') {
             when {
                 environment name: 'needToBeTested', value: 'true'
@@ -26,11 +21,18 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
+        stage('Build') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
+        stage ('Deploy') {
+            steps{
+            sshagent(credentials : ['2']) {
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@158.160.41.51 uptime'
+        }
+    }
+}
     }
     
     post {

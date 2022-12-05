@@ -1,14 +1,17 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.6-alpine'
-            args '-v /root/.m2:/root/.m2'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-            args '-v /usr/bin/docker:/usr/bin/docker'
-        }
-    }
+    agent none
+    
     stages {
         stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.6-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /usr/bin/docker:/usr/bin/docker'
+                    args '-v /usr/bin/ssh:/usr/bin/ssh'
+                }
+            }
             when {
                 environment name: 'needToBeTested', value: 'true'
             }
@@ -22,22 +25,31 @@ pipeline {
             }
         }
         stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
+            agent {
+                docker {
+                    image 'maven:3.6-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-v /usr/bin/docker:/usr/bin/docker'
+                    args '-v /usr/bin/ssh:/usr/bin/ssh'
             }
         }
-        stage ('Deploy') {
-            steps{
-            sshagent(credentials : ['2']) {
-            sh 'ssh -o StrictHostKeyChecking=no ubuntu@158.160.41.51 uptime'
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+                stash includes: 'target/*.jar', name: 'jar'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar'
+                }
+    }
         }
-    }
-}
-    }
-    
-    post {
-        success {
-            archiveArtifacts artifacts: 'target/*.jar'
+        stage ('Deploy') {
+            agent { node 'NODE1' }
+                steps{
+                    unstash 'jar'
+                    sh 'java -jar target/my-app-1.0-SNAPSHOT.jar'
+                }
         }
     }
 }

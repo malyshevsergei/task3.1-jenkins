@@ -1,0 +1,74 @@
+<!--
+  - Copyright 2013-2019 consulo.io
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  - http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+<component>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>Consulo/platform/buildSNAPSHOT/modules/consulo.platform.web/lib</outputDirectory>
+      <unpack>false</unpack>
+      <includes>
+        <include>consulo:consulo-platform-web-plugin</include>
+        <include>consulo:consulo-web-lang-impl</include>
+        <include>consulo:consulo-web-platform-api</include>
+        <include>consulo:consulo-web-platform-impl</include>
+        <include>consulo:consulo-web-ui-impl-server</include>
+        <include>consulo:consulo-web-ui-impl-shared</include>
+
+        <include>consulo.internal.vaadin:vaadin-server</include>
+        <include>consulo.internal.vaadin:vaadin-push</include>
+        <include>consulo.internal.vaadin:vaadin-shared</include>
+        <include>consulo.internal.vaadin:vaadin-themes</include>
+        <include>consulo.internal.vaadin:arquill.editor</include>
+        <include>com.vaadin:vaadin-sass-compiler</include>
+        <include>com.vaadin.external.flute:flute</include>
+        <include>com.vaadin.external.atmosphere:atmosphere-runtime</include>
+        <include>com.vaadin.external.slf4j:vaadin-slf4j-jdk14</include>
+        <include>org.jsoup:jsoup</include>
+        <include>org.w3c.css:sac</include>
+        <include>ar.com.hjg:pngj</include>
+
+        <include>org.eclipse.jetty:jetty-server</include>
+        <include>org.eclipse.jetty:jetty-servlet</include>
+        <include>org.eclipse.jetty:jetty-util</include>
+        <include>org.eclipse.jetty:jetty-http</include>
+        <include>org.eclipse.jetty:jetty-io</include>
+        <include>org.eclipse.jetty:jetty-security</include>
+        <include>org.eclipse.jetty:jetty-continuation</include>
+        <include>org.eclipse.jetty.websocket:websocket-server</include>
+        <include>org.eclipse.jetty.websocket:websocket-api</include>
+        <include>org.eclipse.jetty.websocket:websocket-servlet</include>
+        <include>org.eclipse.jetty.websocket:websocket-common</include>
+
+        <include>javax.servlet:javax.servlet-api</include>
+
+        <include>consulo:consulo-web-ui-impl-client</include>
+      </includes>
+    </dependencySet>
+
+    <dependencySet>
+      <outputDirectory>Consulo/platform/buildSNAPSHOT/boot</outputDirectory>
+      <unpack>false</unpack>
+      <scope>runtime</scope>
+      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+      <includes>
+        <include>consulo:consulo-container-api</include>
+        <include>consulo:consulo-container-impl</include>
+        <include>consulo:consulo-web-bootstrap</include>
+        <include>consulo:consulo-bootstrap</include>
+        <include>consulo:consulo-util-nodep</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</component>

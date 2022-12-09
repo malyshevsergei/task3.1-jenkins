@@ -1,0 +1,53 @@
+pipeline {
+    agent none
+    
+    stages {
+        stage('Test') {
+            agent {
+                docker {
+                    image 'maven:3.6-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            when {
+                environment name: 'needToBeTested', value: 'true'
+            }
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.6-alpine'
+                    args '-v /root/.m2:/root/.m2'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+            }
+        }
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn package -am -pl consulo:consulo-sandbox-web'
+                sh 'ls -la'
+                // stash includes: 'target/*.jar', name: 'jar'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/*.jar'
+                }
+    }
+        }
+        // stage ('Deploy') {
+        //     agent { node 'NODE1' }
+        //         steps{
+        //             unstash 'jar'
+        //             sh 'java -jar target/my-app-1.0-SNAPSHOT.jar'
+        //         }
+        // }
+    }
+}

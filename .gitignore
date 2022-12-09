@@ -1,13 +1,17 @@
-.DS_Store
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
+.consulo/libraries
+.consulo/workspace.xml
+.consulo/sandbox
+.consulo/misc.xml
+.consulo/compiler.xml
+.consulo/encodings.xml
+.consulo/modules.xml
+.consulo/uiDesigner.xml
+.consulo/artifacts/
+.consulo/.name
+.vs/
+/out
 
-# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
-!/.mvn/wrapper/maven-wrapper.jar
+.DS_Store
+project.xcworkspace/
+xcschemes/
+target/

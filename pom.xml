@@ -213,4 +213,11 @@
       </plugin>
     </plugins>
   </build>
+  <distributionManagement>
+    <snapshotRepository>
+        <id>snapshots</id>
+        <name>a0jou8vxfdt3n-artifactory-primary-0-snapshots</name>
+        <url>https://l4523.jfrog.io/artifactory/maven-libs-snapshot</url>
+    </snapshotRepository>
+</distributionManagement>
 </project>

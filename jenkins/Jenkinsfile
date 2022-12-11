@@ -1,9 +1,5 @@
 pipeline {
     agent none
-    environment {
-        version = 1
-        ports   = '4000:4000'
-    }
     stages {
         stage('Stop all docker containers') {
             agent {
@@ -18,8 +14,8 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p ${ports}'
-                    additionalBuildArgs "-t app:${version}"
+                    args '-p 4000:4000'
+                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
                 }
             }
             steps {
@@ -31,8 +27,8 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p ${ports}'
-                    additionalBuildArgs "-t app:${version}"
+                    args '-p 4000:4000'
+                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
                 }
             }
             steps {
@@ -44,8 +40,8 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p ${ports}'
-                    additionalBuildArgs "-t app:${version}"
+                    args '-p 4000:4000'
+                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
                 }
             }
             steps {
@@ -57,7 +53,7 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'docker run -d -p ${ports} app:${version}'
+                sh 'docker run -d -p 4000:4000 app:${env.BUILD_NUMBER}'
             }
         }
     }

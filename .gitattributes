@@ -1,2 +1,2 @@
-# keep this this the first line in the file
-*	text=auto
+# Auto detect text files and perform LF normalization
+* text=auto

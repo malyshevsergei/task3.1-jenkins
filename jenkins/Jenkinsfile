@@ -1,5 +1,9 @@
 pipeline {
     agent none
+    environment {
+        version = 1
+        ports   = '4000:4000'
+    }
     stages {
         stage('Stop all docker containers') {
             agent {

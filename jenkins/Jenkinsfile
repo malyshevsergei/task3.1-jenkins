@@ -1,33 +1,59 @@
 pipeline {
-    agent { 
-        dockerfile {
-            filename "Dockerfile"
-            label 'ubuntu'
-            args '-p ${ports}'
-            additionalBuildArgs "-t app:${version}"
-        }
-    }
+    agent none
     stages {
+        stage('Stop all docker containers') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'docker stop $(docker ps -aq)'
+            }
+        }
         stage('Build') {
+            agent { 
+                dockerfile {
+                    filename "Dockerfile"
+                    label 'ubuntu'
+                    args '-p ${ports}'
+                    additionalBuildArgs "-t app:5"
+                }
+            }
             steps {
                 sh 'npm install'
             }
         }
         stage('Test') {
+            agent { 
+                dockerfile {
+                    filename "Dockerfile"
+                    label 'ubuntu'
+                    args '-p ${ports}'
+                    additionalBuildArgs "-t app:${version}"
+                }
+            }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
         stage('Deliver') {
+            agent { 
+                dockerfile {
+                    filename "Dockerfile"
+                    label 'ubuntu'
+                    args '-p ${ports}'
+                    additionalBuildArgs "-t app:${version}"
+                }
+            }
             steps {
                 sh './jenkins/scripts/deliver.sh'
             }
         }
-    }
-    post {
-        success {
-            node ('ubuntu') {
-                sh 'docker run -p ${ports} app:${version}'
+        stage('Run docker container') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'docker run -d -p 4000:4000 app:5'
             }
         }
     }

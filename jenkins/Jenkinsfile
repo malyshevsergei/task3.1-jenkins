@@ -21,7 +21,13 @@ pipeline {
         stage('Deliver') {
             steps {
                 sh './jenkins/scripts/deliver.sh'
-                archiveArtifacts artifacts: 'build/'
+            }
+        }
+    }
+    post {
+        success {
+            node ('ubuntu') {
+                sh 'docker run -p ${ports} app:${version}'
             }
         }
     }

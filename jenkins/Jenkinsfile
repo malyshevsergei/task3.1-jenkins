@@ -1,6 +1,10 @@
 pipeline {
-    agent {
-        label 'ubuntu'
+    agent { 
+        docker {
+            image 'node:lts-buster-slim'
+            label 'ubuntu'
+            args '-p ${ports}'
+        }
     }
     stages {
         stage('Build') {
@@ -9,28 +13,15 @@ pipeline {
             }
         }
         stage('Test') {
-            agent { 
-                docker {
-                    image 'node:lts-buster-slim'
-                    args '-p ${ports}'
-                }
-            }
             steps {
                 sh './jenkins/scripts/test.sh'
             }
         }
         stage('Deliver') {
-            agent { 
-                docker {
-                    image 'node:lts-buster-slim'
-                    args '-p ${ports}'
-                }
-            }
             steps {
                 sh './jenkins/scripts/deliver.sh'
-                sh 'ls -la'
-                archiveArtifacts artifacts: 'build/'
                 input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                archiveArtifacts artifacts: 'build/'
                 sh './jenkins/scripts/kill.sh'
             }
         }

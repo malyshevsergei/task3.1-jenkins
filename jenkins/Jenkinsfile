@@ -15,7 +15,7 @@ pipeline {
                     filename "Dockerfile"
                     label 'ubuntu'
                     args '-p ${ports}'
-                    additionalBuildArgs "-t app:5"
+                    additionalBuildArgs "-t app:${version}"
                 }
             }
             steps {
@@ -53,7 +53,7 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'docker run -d -p 4000:4000 app:5'
+                sh 'docker run -d -p ${ports} app:${version}'
             }
         }
     }

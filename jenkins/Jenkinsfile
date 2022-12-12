@@ -6,13 +6,12 @@ pipeline {
     }
     
     stages {
-        stage('Stop all docker containers') {
+        stage('Stop and remove all docker containers') {
             agent {
                 label 'ubuntu'
             }
             steps {
-                sh "printenv"
-                sh 'docker stop $(docker ps -aq)'
+                sh 'docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
             }
         }
         stage('Build') {

@@ -1,11 +1,17 @@
 pipeline {
     agent none
+    
+    environment {
+        PORTS    = '4000:4000'
+    }
+    
     stages {
         stage('Stop all docker containers') {
             agent {
                 label 'ubuntu'
             }
             steps {
+                sh "printenv"
                 sh 'docker stop $(docker ps -aq)'
             }
         }
@@ -14,8 +20,8 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p 4000:4000'
-                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
+                    args '-p ${Ports}'
+                    additionalBuildArgs "-t app:$BUILD_NUMBER"
                 }
             }
             steps {
@@ -27,9 +33,12 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p 4000:4000'
-                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
+                    args '-p ${Ports}'
+                    additionalBuildArgs "-t app:$BUILD_NUMBER"
                 }
+            }
+            options {
+                skipDefaultCheckout()
             }
             steps {
                 sh './jenkins/scripts/test.sh'
@@ -40,9 +49,12 @@ pipeline {
                 dockerfile {
                     filename "Dockerfile"
                     label 'ubuntu'
-                    args '-p 4000:4000'
-                    additionalBuildArgs "-t app:${env.BUILD_NUMBER}"
+                    args '-p ${Ports}'
+                    additionalBuildArgs "-t app:$BUILD_NUMBER"
                 }
+            }
+            options {
+                skipDefaultCheckout()
             }
             steps {
                 sh './jenkins/scripts/deliver.sh'
@@ -52,8 +64,11 @@ pipeline {
             agent {
                 label 'ubuntu'
             }
+            options {
+                skipDefaultCheckout()
+            }
             steps {
-                sh 'docker run -d -p 4000:4000 app:${env.BUILD_NUMBER}'
+                sh 'docker run -d -p ${Ports} app:$BUILD_NUMBER'
             }
         }
     }
